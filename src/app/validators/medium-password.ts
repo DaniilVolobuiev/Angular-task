@@ -14,7 +14,7 @@ export function createMediumStrengthValidator(): ValidatorFn {
 
     const hasNumeric = /[0-9]+/.test(value);
 
-    const hasSymbols = /[!@#$%^&*()]+/.test(value);
+    const hasSymbols = /[/^[^`~!@#$%\^&*()_+={}|[\]\\:';"<>?,./]+/.test(value);
 
     const passwordValid =
       ((hasUpperCase || hasLowerCase) && hasNumeric) ||

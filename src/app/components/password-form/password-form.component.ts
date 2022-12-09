@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { createMediumStrengthValidator } from 'src/app/validators/medium-password';
-import { createStrongStrengthValidator } from 'src/app/validators/strong-password';
-import { createEasyStrengthValidator } from '../../validators/easy-password';
+import {
+  createEasyStrengthValidator,
+  createMediumStrengthValidator,
+  createStrongStrengthValidator,
+} from 'src/app/validators/passwordValidators';
 
 @Component({
   selector: 'app-password-form',
@@ -22,5 +24,66 @@ export class PasswordFormComponent {
 
   get password() {
     return this.form.controls.password as FormControl;
+  }
+
+  getClassEasy() {
+    return {
+      'bg-slate-400': this.password.errors?.required,
+      'bg-red-400':
+        this.password.errors?.minlength ||
+        (!this.password.errors?.minlength &&
+          !this.password.errors?.required &&
+          this.password.errors?.easyPassword &&
+          !this.password.errors?.strongPassword),
+
+      'bg-yellow-400':
+        this.password.errors?.easyPassword &&
+        this.password.errors?.mediumPassword &&
+        !this.password.errors?.strongPassword &&
+        !this.password.errors?.minlength &&
+        !this.password.errors?.required,
+
+      'bg-green-400':
+        this.password.errors?.easyPassword &&
+        this.password.errors?.mediumPassword &&
+        this.password.errors?.strongPassword &&
+        !this.password.errors?.minlength &&
+        !this.password.errors?.required,
+    };
+  }
+  getClassMedium() {
+    return {
+      'bg-slate-400':
+        this.password.errors?.required || this.password.errors?.easyPassword,
+      'bg-red-400': this.password.errors?.minlength,
+
+      'bg-yellow-400':
+        this.password.errors?.easyPassword &&
+        this.password.errors?.mediumPassword &&
+        !this.password.errors?.strongPassword &&
+        !this.password.errors?.minlength &&
+        !this.password.errors?.required,
+      'bg-green-400':
+        this.password.errors?.easyPassword &&
+        this.password.errors?.mediumPassword &&
+        this.password.errors?.strongPassword &&
+        !this.password.errors?.minlength &&
+        !this.password.errors?.required,
+    };
+  }
+  getClassStrong() {
+    return {
+      'bg-slate-400':
+        this.password.errors?.required ||
+        this.password.errors?.easyPassword ||
+        this.password.errors?.mediumPassword,
+      'bg-red-400': this.password.errors?.minlength,
+      'bg-green-400':
+        this.password.errors?.easyPassword &&
+        this.password.errors?.mediumPassword &&
+        this.password.errors?.strongPassword &&
+        !this.password.errors?.minlength &&
+        !this.password.errors?.required,
+    };
   }
 }
